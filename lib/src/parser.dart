@@ -53,9 +53,9 @@ class Parser {
   @visibleForTesting
   String interpolate(String val, Map<String, String> env) =>
       val.replaceAllMapped(_bashVar, (m) {
-        var k = m.group(2);
-        if (!_has(env, k)) return '';
-        return env[k];
+        final k = m.group(2);
+        if (k == null || !_has(env, k)) return '';
+        return env[k]!;
       });
 
   /// If [val] is wrapped in single or double quotes, returns the quote character.
@@ -63,13 +63,13 @@ class Parser {
   @visibleForTesting
   String surroundingQuote(String val) {
     if (!_surroundQuotes.hasMatch(val)) return '';
-    return _surroundQuotes.firstMatch(val).group(1);
+    return _surroundQuotes.firstMatch(val)!.group(1)!;
   }
 
   /// Removes quotes (single or double) surrounding a value.
   @visibleForTesting
   String unquote(String val) =>
-      val.replaceFirstMapped(_surroundQuotes, (m) => m[2]).trim();
+      val.replaceFirstMapped(_surroundQuotes, (m) => m[2]!).trim();
 
   /// Strips comments (trailing or whole-line).
   @visibleForTesting
